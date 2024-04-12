@@ -1,0 +1,38 @@
+import java.sql.*;
+
+public class SurveyDashboardBackend {
+    // JDBC URL, username, and password
+    static final String JDBC_URL = "jdbc:mysql://localhost:3306/survey_db";
+    static final String USERNAME = "username";
+    static final String PASSWORD = "password";
+
+    public static void main(String[] args) {
+        try {
+            // Establish connection to the database
+            Connection connection = DriverManager.getConnection(JDBC_URL, USERNAME, PASSWORD);
+
+            // Create statement
+            Statement statement = connection.createStatement();
+
+            // Execute query to retrieve survey responses
+            String query = "SELECT * FROM survey_responses";
+            ResultSet resultSet = statement.executeQuery(query);
+
+            // Display survey responses
+            System.out.println("Survey Responses:");
+            while (resultSet.next()) {
+                int respondentId = resultSet.getInt("respondent_id");
+                String question = resultSet.getString("question");
+                String response = resultSet.getString("response");
+                System.out.println("Respondent ID: " + respondentId + ", Question: " + question + ", Response: " + response);
+            }
+
+            // Close connections
+            resultSet.close();
+            statement.close();
+            connection.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+}
